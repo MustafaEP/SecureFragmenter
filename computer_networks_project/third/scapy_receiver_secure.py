@@ -33,13 +33,13 @@ def packet_handler(pkt):
             all_frags = fragments[ip_id]
             expected = max(all_frags.keys()) + 1
             if len(all_frags) == expected:
-                print("🔓 Tüm şifreli fragment'lar alındı. Çözülüyor...")
+                print("Tüm şifreli fragment'lar alındı. Çözülüyor...")
 
                 full_data = b''.join([all_frags[i] for i in sorted(all_frags)])
                 iv = iv_storage.get(ip_id)
 
                 if iv is None:
-                    print("❌ IV bulunamadı, deşifre edilemez!")
+                    print("IV bulunamadı, deşifre edilemez!")
                     return
 
                 cipher = AES.new(KEY, AES.MODE_CBC, iv)
@@ -50,12 +50,12 @@ def packet_handler(pkt):
 
                 calculated_hash = sha256(original_data).digest()
                 if received_hash == calculated_hash:
-                    print("✅ SHA-256 bütünlüğü doğrulandı.")
+                    print(" SHA-256 bütünlüğü doğrulandı.")
                     with open("reassembled_secure.txt", "wb") as f:
                         f.write(original_data)
-                    print("📄 Dosya yazıldı: reassembled_secure.txt")
+                    print(" Dosya yazıldı: reassembled_secure.txt")
                 else:
-                    print("❌ Hash doğrulama başarısız!")
+                    print(" Hash doğrulama başarısız!")
 
                 # Temizlik
                 del fragments[ip_id]
